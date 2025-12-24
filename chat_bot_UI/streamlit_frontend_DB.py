@@ -37,7 +37,14 @@ if 'thread_list' not in st.session_state:
     raw_threads=retrieve_all_threads() #checking from all uniquee thread_id from db
     st.session_state['thread_list'] = [{'id': tid, 'label': f'Chat {i+1}'}for i, tid in enumerate(raw_threads)]
 add_thread(st.session_state['thread_id'])
-CONFIG = {'configurable': {'thread_id': st.session_state['thread_id']}} # for persistance implementation
+#CONFIG = {'configurable': {'thread_id': st.session_state['thread_id']}} # for persistance implementation
+CONFIG = { #for better langsmith integration....tracing will be done according to thread_id
+        "configurable": {"thread_id": st.session_state["thread_id"]},
+        "metadata": {
+            "thread_id": st.session_state["thread_id"]
+        },
+        "run_name": "chat_turn",
+    }
 #End
 
 #Side Bar UI
